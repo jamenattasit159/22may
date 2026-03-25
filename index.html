@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HBD_MAY.EXE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="scanlines"></div>
+    <canvas id="matrixCanvas"></canvas>
+    
+    <!-- Intro Screen (Terminal) -->
+    <div id="intro-screen" class="screen active">
+        <div class="terminal-container">
+            <div class="terminal-header">
+                <span style="display:flex; gap: 5px;">
+                    <span style="width:12px; height:12px; background:#ff3b30; border-radius:50%;"></span>
+                    <span style="width:12px; height:12px; background:#ffcc00; border-radius:50%;"></span>
+                    <span style="width:12px; height:12px; background:#28cd41; border-radius:50%;"></span>
+                </span>
+                <span class="title">cmd.exe - HACK_MAINFRAME</span>
+            </div>
+            <div class="terminal-body" id="typing-intro">
+                <!-- Text typed by JS -->
+            </div>
+            <div id="intro-btn-container" class="hidden-fade mt-2">
+                <button id="open-btn" class="hacker-btn">[ RUN BYPASS_PROTOCOL.EXE ]</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCANNING SCREEN -->
+    <div id="scan-screen" class="screen hidden">
+        <div class="terminal-container">
+            <div class="terminal-header">
+                <span class="title">BIOMETRIC_SCANNER.EXE</span>
+            </div>
+            <div style="margin-top: 2rem; text-align: center;">
+                <h3 class="glow-blue glitched" data-text="> ACCESSING CAMERA...">> ACCESSING CAMERA...</h3>
+                
+                <div class="funny-photo-container mt-2">
+                    <div class="cyber-overlay">
+                        <div class="crosshair"></div>
+                        <div class="scanner-line"></div>
+                    </div>
+                    <!-- Camera feed -->
+                    <video id="webcam-video" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover; filter: sepia(100%) hue-rotate(80deg) saturate(200%) contrast(1.2) brightness(0.8);"></video>
+                </div>
+                
+                <p id="scan-text" class="terminal-text mt-2" style="min-height: 2rem;">> REQUESTING CAMERA PERMISSION...</p>
+                
+                <div class="action-btn-container mt-2 text-center">
+                    <button id="scan-btn" class="hacker-btn" style="display: none;">[ INITIATE_SCAN ]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TROLL SCREEN -->
+    <div id="troll-screen" class="screen hidden">
+        <div class="terminal-container error-border">
+            <div class="terminal-header">
+                <span class="title">ERROR_LOG.TXT</span>
+            </div>
+            <div style="margin-top: 2rem;">
+                <h1 class="error-text glitched" data-text="SYSTEM COMPROMISED">SYSTEM COMPROMISED</h1>
+                <p class="funny-title">> ERROR 404: BEAUTY NOT FOUND</p>
+                
+                <div class="funny-photo-container">
+                    <div class="cyber-overlay">
+                        <div class="crosshair"></div>
+                        <div class="scanner-line"></div>
+                    </div>
+                    <img src="./may.png" alt="Target: May" class="funny-photo">
+                </div>
+                
+                <p class="terminal-text">> สแกนใบหน้าล้มเหลว: ใบหน้ามีความจุพิกเซลเกินขนาดหน้าจอ</p>
+                <p class="terminal-text">> ตรวจพบยัยอ้วน 1 อัตรา... อนุญาตให้เข้าถึงหรือไม่? (Y/N)</p>
+                
+                <div class="action-btn-container mt-2 text-center">
+                    <button id="next-btn" class="hacker-btn error-btn">[ Y ] ยอมรับความจริงแล้วไปต่อ 🙄</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN SCREEN -->
+    <div id="main-screen" class="screen hidden">
+        <div class="terminal-container success-border">
+            <div class="terminal-header">
+                <span class="title">HBD_ROOT_ACCESS</span>
+            </div>
+            <div style="margin-top: 1rem;">
+                <div class="hbd-text">
+                    <h1 class="glow-green glitched" data-text="> ACCESS GRANTED">> ACCESS GRANTED</h1>
+                    <h2 class="name-gradient">TARGET: น้องเมย์ (ยัยตัวแสบ)</h2>
+                </div>
+                
+                <div class="message-container terminal-text">
+                    <p>> DECRYPTING BIRTHDAY WISHES...</p>
+                    <p>> หยอกๆ... สุขสันต์วันเกิดนะครับคนเก่ง 🎉</p>
+                    <p>> ขอให้ปีนี้ของเตงมีแต่เรื่องดีๆ เข้ามานะ</p>
+                    <p>> กินเก่งๆ กวนตีนน้อยลงนิดนึงก็ดีนะ 🤪</p>
+                    <p>> สุขภาพร่างกายแข็งแรง ไม่เจ็บไม่ป่วยนะคะ</p>
+                    <p class="highlight">> STATUS: ถึงจะดื้อแต่ก็รักเมย์ที่สุดในโลกเลยยยยย 💕</p>
+                </div>
+                
+                <div class="cute-photo-container">
+                    <img src="./may.png" alt="May" class="cute-photo">
+                </div>
+                
+                <div class="cake-container">
+                    <div class="cake glitch" data-text="🎂">🎂</div>
+                </div>
+                
+                <div class="action-btn-container text-center">
+                    <button id="more-btn" class="hacker-btn">[ SHOW_SECRET_FILES.BAT ]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden modal/extra screen -->
+    <div id="secret-screen" class="screen hidden">
+        <div class="terminal-container secret-border">
+            <div class="terminal-header">
+                <span class="title">ENCRYPTED_DATA.BIN</span>
+            </div>
+            <div style="margin-top: 2rem;">
+                <h3 class="glow-blue">> RECOVERING HIDDEN FILES...</h3>
+                <div class="terminal-text mt-2">
+                    <p>> You are my universe ✨</p>
+                    <p>> ขอบคุณที่เข้ามาเป็นความสุขในทุกๆ วันนะ</p>
+                    <p>> เถียงกันบ้าง ตีกันบ้าง แต่มันก็มีความหมายมากๆ เลย</p>
+                    <p>> เราจะเติบโตและเป็นป้าแก่ๆ ยายแก่ๆ ไปด้วยกัน เอ้ย! 😂</p>
+                    <p>> อยู่ให้เค้ากวนประสาทและแฮคหัวใจไปทุกๆ ปีเลยนะคะ ❤️</p>
+                </div>
+                
+                <div class="photo-placeholder mt-2">
+                    <img src="./may.png" alt="May" class="secret-photo">
+                    <div class="heart-pulse">💖</div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button id="back-btn" class="hacker-btn">[ RETURN TO MAIN_ROOT ]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./main.js"></script>
+</body>
+</html>
