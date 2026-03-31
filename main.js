@@ -1,4 +1,45 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // AUDIO SYSTEM
+    let audioCtx = null;
+    function initAudio() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    
+    function playBeep(freq = 800, type = 'sine', duration = 0.05, vol = 0.05) {
+        if (!audioCtx || audioCtx.state === 'suspended') return;
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.type = type;
+        oscillator.frequency.value = freq;
+        gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + duration);
+    }
+    document.body.addEventListener('click', initAudio, { once: true });
+
+    // HACKER DECODE EFFECT
+    function decodeText(element) {
+        if (!element) return;
+        const originalText = element.getAttribute('data-decode') || element.innerText;
+        element.setAttribute('data-decode', originalText);
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";
+        let iterations = 0;
+        const interval = setInterval(() => {
+            element.innerText = originalText.split("").map((letter, index) => {
+                if(index < iterations) return originalText[index];
+                return chars[Math.floor(Math.random() * chars.length)];
+            }).join("");
+            if(iterations >= originalText.length) {
+                clearInterval(interval);
+                element.innerText = originalText;
+            }
+            iterations += 1/2; // speed
+        }, 30);
+    }
+
     const introScreen = document.getElementById('intro-screen');
     const scanScreen = document.getElementById('scan-screen');
     const trollScreen = document.getElementById('troll-screen');
@@ -39,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let charIndex = 0;
         const interval = setInterval(() => {
             span.textContent += lineText[charIndex];
+            playBeep(400 + Math.random()*200, 'square', 0.03, 0.015);
             charIndex++;
             if (charIndex >= lineText.length) {
                 clearInterval(interval);
@@ -67,19 +109,53 @@ document.addEventListener('DOMContentLoaded', () => {
     for(let x = 0; x < columns; x++) {
         drops[x] = 1; 
     }
+
+    let mouse = { x: -1000, y: -1000 };
+    document.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        
+        // 3D Tilt Effect for all screens
+        const screens = document.querySelectorAll('.terminal-container');
+        const xAxis = (window.innerWidth / 2 - e.clientX) / 40;
+        const yAxis = (window.innerHeight / 2 - e.clientY) / 40;
+        screens.forEach(screen => {
+            screen.style.transform = `perspective(1000px) rotateY(${-xAxis}deg) rotateX(${yAxis}deg) translateZ(10px)`;
+        });
+    });
+    
+    // Add hover sounds to buttons
+    document.querySelectorAll('.hacker-btn').forEach(btn => {
+        btn.addEventListener('mouseenter', () => playBeep(900, 'square', 0.05, 0.03));
+        btn.addEventListener('click', () => playBeep(1200, 'square', 0.1, 0.05));
+    });
     
     function drawMatrix() {
-        ctx.fillStyle = 'rgba(0, 5, 0, 0.05)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
         ctx.fillRect(0, 0, width, height);
         
-        ctx.fillStyle = '#0F0'; 
+        ctx.fillStyle = '#0ABAB5'; 
         ctx.font = fontSize + 'px "Share Tech Mono"';
         
         for(let i = 0; i < drops.length; i++) {
             const text = letters[Math.floor(Math.random() * letters.length)];
-            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            const dropX = i * fontSize;
+            const dropY = drops[i] * fontSize;
             
-            if(drops[i] * fontSize > height && Math.random() > 0.975) {
+            const dx = dropX - mouse.x;
+            const dy = dropY - mouse.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            
+            if (dist < 100) {
+                ctx.fillStyle = '#FFFFFF';
+                // push the drop away slightly (pseudo-physics) or just highlight
+                ctx.fillText(text, dropX + (dx/dist)*10, dropY + (dy/dist)*10);
+                ctx.fillStyle = '#0ABAB5';
+            } else {
+                ctx.fillText(text, dropX, dropY);
+            }
+            
+            if(dropY > height && Math.random() > 0.975) {
                 drops[i] = 0;
             }
             drops[i]++;
@@ -112,6 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             scanScreen.classList.remove('hidden');
             scanScreen.classList.add('active');
+            decodeText(document.querySelector('#scan-screen h3'));
             startWebcam();
         }, 500); 
     });
@@ -181,6 +258,10 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             mainScreen.classList.remove('hidden');
             mainScreen.classList.add('active');
+            setTimeout(() => {
+                decodeText(document.querySelector('.glow-green'));
+                decodeText(document.querySelector('.name-gradient'));
+            }, 100);
         }, 400);
     });
 
@@ -192,6 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             secretScreen.classList.remove('hidden');
             secretScreen.classList.add('active');
+            decodeText(document.querySelector('#secret-screen h3'));
         }, 400);
     });
 

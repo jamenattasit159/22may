@@ -1,10 +1,10 @@
 :root {
-    --bg-dark: #020902;
-    --hacker-green: #00ff00;
-    --hacker-green-dark: #006600;
+    --bg-dark: #000000;
+    --hacker-green: #0ABAB5;
+    --hacker-green-dark: #055A55;
     --hacker-red: #ff0033;
     --hacker-blue: #00ccff;
-    --text-dim: #009900;
+    --text-dim: #07807B;
 }
 
 * {
@@ -14,6 +14,13 @@
     user-select: none;
 }
 
+@keyframes crt-power-on {
+    0% { transform: scale(1, 0.01); opacity: 0; filter: brightness(5) contrast(3); }
+    40% { transform: scale(1, 0.02); opacity: 1; filter: brightness(5) contrast(3); }
+    70% { transform: scale(1, 1); filter: brightness(1) contrast(1); }
+    100% { transform: scale(1, 1); }
+}
+
 body {
     background-color: var(--bg-dark);
     font-family: 'Share Tech Mono', 'Prompt', monospace;
@@ -21,6 +28,7 @@ body {
     overflow: hidden;
     height: 100vh;
     width: 100vw;
+    animation: crt-power-on 1.2s cubic-bezier(0.86, 0, 0.07, 1) forwards;
 }
 
 #matrixCanvas {
@@ -96,7 +104,7 @@ body::after {
 
 /* Terminal Container Stylings */
 .terminal-container {
-    background: rgba(0, 15, 0, 0.85);
+    background: rgba(0, 0, 0, 0.85);
     border: 1px solid var(--hacker-green);
     border-radius: 5px;
     padding: 0 1.5rem 1.5rem 1.5rem;
@@ -105,6 +113,9 @@ body::after {
     box-shadow: 0 0 15px var(--hacker-green-dark);
     position: relative;
     backdrop-filter: blur(5px);
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .terminal-header {
@@ -136,7 +147,7 @@ body::after {
 
 .terminal-container.success-border {
     border-color: var(--hacker-green);
-    box-shadow: 0 0 25px rgba(0, 255, 0, 0.4);
+    box-shadow: 0 0 25px rgba(10, 186, 181, 0.4);
 }
 
 .terminal-container.secret-border {
@@ -177,7 +188,7 @@ body::after {
     cursor: pointer;
     text-transform: uppercase;
     transition: all 0.2s;
-    box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.15);
+    box-shadow: inset 0 0 10px rgba(10, 186, 181, 0.15);
     letter-spacing: 1px;
 }
 
@@ -321,14 +332,14 @@ body::after {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: sepia(100%) hue-rotate(80deg) saturate(200%) contrast(1.2); 
+    filter: sepia(100%) hue-rotate(135deg) saturate(200%) contrast(1.2); 
 }
 
 .cake-container {
     text-align: center;
     font-size: 4rem;
     margin-bottom: 1.5rem;
-    filter: sepia(1) hue-rotate(80deg) saturate(3);
+    filter: sepia(1) hue-rotate(135deg) saturate(3);
 }
 
 /* Secret Screen */
@@ -404,6 +415,12 @@ body::after {
     40% { clip-path: inset(50% 0 30% 0); left: -2px;}
     100% { clip-path: inset(5% 0 80% 0); left: 2px;}
 }
+
+.glitched:hover {
+    animation: glitch-anim-1 0.15s infinite linear alternate-reverse, glitch-anim-2 0.2s infinite linear alternate-reverse;
+}
+.glitched:hover::before { filter: brightness(1.5); }
+.glitched:hover::after { filter: brightness(1.5); }
 
 /* Responsive */
 @media (max-width: 768px) {
